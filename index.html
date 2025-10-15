@@ -393,23 +393,26 @@
             result.style.display = 'none';
             statusText.textContent = 'Searching for prices on PriceCharting...';
             
+            // Prepare the data
+            const gameData = {
+                system: system,
+                title: gameName,
+                condition: condition
+            };
+            
             const formData = new FormData();
+            formData.append('manual_data', JSON.stringify(gameData));
             
             // Add the image if one was selected
             if (selectedFile) {
                 formData.append('image', selectedFile);
             }
             
-            // Add form fields directly (not as JSON)
-            formData.append('system', system);
-            formData.append('title', gameName);
-            formData.append('condition', condition);
+            console.log('Sending to webhook:', webhookUrl);
+            console.log('Game data:', gameData);
             
             try {
                 statusText.textContent = 'Adding to spreadsheet...';
-                
-                console.log('Sending to webhook:', webhookUrl);
-                console.log('Game data:', gameData);
                 
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
